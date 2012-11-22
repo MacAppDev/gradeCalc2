@@ -37,7 +37,7 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 	private ListView mainListView;
 	private ArrayAdapter<String> listAdapter;
 	private CourseItemDialog courseItemDialog;
-	private List<CourseItem> courseItemList;
+	private ArrayList<CourseItem> courseItemList = new ArrayList<CourseItem>();
 	
 	// Listener for clicking on an item in the ListView -> triggers dialog
 	private OnItemClickListener courseItemClickListener = new OnItemClickListener() {
