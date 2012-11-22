@@ -19,13 +19,13 @@ public final class R {
         public static final int bOk=0x7f070006;
         public static final int buttonAlert=0x7f070008;
         public static final int etAssName=0x7f070000;
-        public static final int etPercentMark=0x7f070003;
-        public static final int etPercentWorth=0x7f070001;
+        public static final int etPercentMark=0x7f070004;
+        public static final int etPercentWorth=0x7f070002;
         public static final int mainListView=0x7f070007;
         public static final int menu_settings=0x7f07000a;
         public static final int rowTextView=0x7f070009;
-        public static final int tvPercentEach=0x7f070002;
-        public static final int tvPercentMark=0x7f070004;
+        public static final int tvPercentEach=0x7f070001;
+        public static final int tvPercentMark=0x7f070003;
     }
     public static final class layout {
         public static final int dialog=0x7f030000;
