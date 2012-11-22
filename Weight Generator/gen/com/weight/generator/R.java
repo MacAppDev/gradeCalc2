@@ -15,8 +15,8 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int bCancel=0x7f070006;
-        public static final int bOk=0x7f070005;
+        public static final int bCancel=0x7f070005;
+        public static final int bOk=0x7f070006;
         public static final int buttonAlert=0x7f070008;
         public static final int etAssName=0x7f070000;
         public static final int etPercentMark=0x7f070003;

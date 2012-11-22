@@ -1,61 +1,97 @@
-//Test comment, suck my dick
+/**
+ * ListViewExample.java
+ *
+ * <h4>Description</h4>
+ *
+ * Activity for each course
+ * Contains relevant course items
+ * Items can be added, modified, or deleted by the user
+
+ * <h4>Notes</h4>
+ *
+ * <h4>References</h4>
+ *
+ *
+ * @authors      NA, MR, JS
+ *
+ */
 
 package com.weight.generator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.app.Dialog;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-public class ListViewExample extends Activity {
+public class ListViewExample extends FragmentActivity implements CourseItemDialogListener {
 	private ListView mainListView;
 	private ArrayAdapter<String> listAdapter;
-	Dialog d;
-	String classes[] = { "startingPoint" };
+	private CourseItemDialog courseItemDialog;
+	private List<CourseItem> courseItemList;
+	
+	// Listener for clicking on an item in the ListView -> triggers dialog
+	private OnItemClickListener courseItemClickListener = new OnItemClickListener() {
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			showCourseItemDialog();
+		}
+	};
 
+	// ENTRY point for activity
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
 		mainListView = (ListView) findViewById(R.id.mainListView);
-		String[] planets = new String[] { "Add New Entry" };
+		
+		String[] courseItems = new String[] { "Add New Entry" };
 		ArrayList<String> planetList = new ArrayList<String>();
-		planetList.addAll(Arrays.asList(planets));
+		planetList.addAll(Arrays.asList(courseItems));
 		// Create ArrayAdapter using the planet list.
 		listAdapter = new ArrayAdapter<String>(this, R.layout.row_row,
 				planetList);
 
-		// Add more planets. If you passed a String[] instead of a List<String>
+		// Add more items. If you passed a String[] instead of a List<String>
 		// into the ArrayAdapter constructor, you must not add more items.
 		// Otherwise an exception will occur.
-		listAdapter.add("Ceres");
-		d = new Dialog(this);
+		
 		// Set the ArrayAdapter as the ListView's adapter.
 		mainListView.setAdapter(listAdapter);
-		mainListView.setOnItemClickListener(new OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				d.setTitle("New Assignment");
-				d.setContentView(R.layout.dialog);
-				d.show();
-			}
-
-		});
+		mainListView.setOnItemClickListener(courseItemClickListener);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.list, menu);
 		return true;
+	}
+	
+	// Method to invoke the modify/add item dialog
+	private void showCourseItemDialog() {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		courseItemDialog = new CourseItemDialog();
+		courseItemDialog.show(fragmentManager, "Edit Item Dialog");
+	}
+
+	// Method to add item to courseItemList (from dialog); 
+	// fulfills interface contract requirements
+	public void AddItemToList(CourseItem newItem) {
+		// Check if the item already exists
+		if (!courseItemList.contains(newItem)) {
+			courseItemList.add(newItem);
+		}
+		
+		// TODO TEST TOAST notification
+		Toast.makeText(this, newItem.itemName.toString(), Toast.LENGTH_SHORT).show();
 	}
 }

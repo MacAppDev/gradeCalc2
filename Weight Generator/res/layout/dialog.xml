@@ -20,6 +20,7 @@
             android:id="@+id/etPercentWorth"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
             android:hint="%" />
 
         <TextView
@@ -53,18 +54,19 @@
         android:orientation="horizontal" >
 
         <Button
+            android:id="@+id/bCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel" />
+
+        <Button
             android:id="@+id/bOk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="OK" />
 
-        <Button
-            android:id="@+id/bCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel" />
     </LinearLayout>
 
 </LinearLayout>
