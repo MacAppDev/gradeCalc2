@@ -58,7 +58,7 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 		ArrayList<String> planetList = new ArrayList<String>();
 		planetList.addAll(Arrays.asList(courseItems));
 		// Create ArrayAdapter using the planet list.
-		listAdapter = new ArrayAdapter<String>(this, R.layout.row_row,
+		listAdapter = new ArrayAdapter<String>(this, R.layout.row_element,
 				planetList);
 
 		// Add more items. If you passed a String[] instead of a List<String>

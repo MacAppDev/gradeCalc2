@@ -22,8 +22,10 @@ public final class R {
         public static final int etPercentMark=0x7f070004;
         public static final int etPercentWorth=0x7f070002;
         public static final int mainListView=0x7f070007;
-        public static final int menu_settings=0x7f07000a;
-        public static final int rowTextView=0x7f070009;
+        public static final int menu_settings=0x7f07000c;
+        public static final int tvAvg=0x7f07000a;
+        public static final int tvDesired=0x7f07000b;
+        public static final int tvName=0x7f070009;
         public static final int tvPercentEach=0x7f070001;
         public static final int tvPercentMark=0x7f070003;
     }
@@ -31,7 +33,7 @@ public final class R {
         public static final int dialog=0x7f030000;
         public static final int list=0x7f030001;
         public static final int main=0x7f030002;
-        public static final int row_row=0x7f030003;
+        public static final int row_element=0x7f030003;
     }
     public static final class menu {
         public static final int list=0x7f060000;
