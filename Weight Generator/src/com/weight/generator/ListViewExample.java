@@ -35,7 +35,8 @@ import android.widget.Toast;
 
 public class ListViewExample extends FragmentActivity implements CourseItemDialogListener {
 	private ListView mainListView;
-	private ArrayAdapter<String> listAdapter;
+	private ArrayAdapter<CourseItem> listAdapter;
+	private CourseItemAdapter arrayAdapter;
 	private CourseItemDialog courseItemDialog;
 	private ArrayList<CourseItem> courseItemList = new ArrayList<CourseItem>();
 	
@@ -54,19 +55,26 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 		setContentView(R.layout.list);
 		mainListView = (ListView) findViewById(R.id.mainListView);
 		
-		String[] courseItems = new String[] { "Add New Entry" };
-		ArrayList<String> planetList = new ArrayList<String>();
-		planetList.addAll(Arrays.asList(courseItems));
-		// Create ArrayAdapter using the planet list.
-		listAdapter = new ArrayAdapter<String>(this, R.layout.row_element,
-				planetList);
+//		String[] courseItems = new String[] { "Add New Entry" };
+//		ArrayList<String> planetList = new ArrayList<String>();
+//		planetList.addAll(Arrays.asList(courseItems));
+//		// Create ArrayAdapter using the planet list.
+//		listAdapter = new ArrayAdapter<String>(this, R.layout.row_row,
+//				planetList);
+		
+		CourseItem defaultItem = new CourseItem(" Add New Entry ", 0, 0, 0);
+		this.AddItemToList(defaultItem); // Load in default item
+		
+		// Create ArrayAdapter to load into ListView using the list of course items
+		arrayAdapter = new CourseItemAdapter(ListViewExample.this, R.layout.row_element, courseItemList);
+//		listAdapter = new ArrayAdapter<CourseItem>(this, R.layout.row_row, courseItemList);
 
 		// Add more items. If you passed a String[] instead of a List<String>
 		// into the ArrayAdapter constructor, you must not add more items.
 		// Otherwise an exception will occur.
 		
 		// Set the ArrayAdapter as the ListView's adapter.
-		mainListView.setAdapter(listAdapter);
+		mainListView.setAdapter(arrayAdapter);
 		mainListView.setOnItemClickListener(courseItemClickListener);
 	}
 
@@ -88,7 +96,7 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 	public void AddItemToList(CourseItem newItem) {
 		// Check if the item already exists
 		if (!courseItemList.contains(newItem)) {
-			courseItemList.add(newItem);
+			courseItemList.add(courseItemList.size(), newItem); // Add to end
 		}
 		
 		// TODO TEST TOAST notification
