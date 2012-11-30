@@ -45,10 +45,19 @@ public class CourseItemAdapter extends ArrayAdapter<CourseItem>{
 		TextView itemRowGrade = (TextView) itemView.findViewById(R.id.tvAvg);
 		TextView itemRowDesired = (TextView) itemView.findViewById(R.id.tvDesired);
 		
+		String itemName = courseItem.itemName.toString();
+		double itemAchievedGrade = courseItem.itemAchievedGrade;
+		String itemAchievedGradeString;
+		double itemDesiredGrade = courseItem.itemDesiredGrade;
+		String itemDesiredGradeString;
+		
+		itemAchievedGradeString = (itemAchievedGrade == -1.)? "N/A" : String.valueOf(itemAchievedGrade);
+		itemDesiredGradeString = (itemDesiredGrade == -1.)? "N/A" : String.valueOf(itemDesiredGrade);
+		
 		// Assign the appropriate data from item object above
-		itemRowText.setText(courseItem.itemName.toString());
-		itemRowGrade.setText(String.valueOf(courseItem.itemAchievedGrade));
-		itemRowDesired.setText(String.valueOf(courseItem.itemDesiredGrade));
+		itemRowText.setText(itemName);
+		itemRowGrade.setText(itemAchievedGradeString);
+		itemRowDesired.setText(itemDesiredGradeString);
 		
 		return itemView;
 	}

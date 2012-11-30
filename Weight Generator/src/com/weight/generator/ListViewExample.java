@@ -42,9 +42,10 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 	
 	// Listener for clicking on an item in the ListView -> triggers dialog
 	private OnItemClickListener courseItemClickListener = new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+		public void onItemClick(AdapterView<?> arg0, View arg1, int itemIndex,
 				long arg3) {
-			showCourseItemDialog();
+			Toast.makeText(ListViewExample.this, String.valueOf(itemIndex), Toast.LENGTH_SHORT).show();
+			showCourseItemDialog(itemIndex);
 		}
 	};
 
@@ -85,7 +86,7 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 	}
 	
 	// Method to invoke the modify/add item dialog
-	private void showCourseItemDialog() {
+	private void showCourseItemDialog(int itemIndex) {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		courseItemDialog = new CourseItemDialog();
 		courseItemDialog.show(fragmentManager, "Edit Item Dialog");

@@ -37,11 +37,18 @@ public class CourseItemDialog extends DialogFragment  {
 	private Button cancelButton;
 	private Button saveButton;
 	
+	private CourseItem modifyItem;
+	
 	public interface EditNameDialogListener {
 		void onFinishEditDialog(String inputText);
 	}
 	public CourseItemDialog() {
 		// Empty constructor required for DialogFragment
+	}
+	
+	public CourseItemDialog(CourseItem item) {
+		// Constructor to modify course data in dialog
+		modifyItem = item;
 	}
 	
 	@Override
@@ -56,6 +63,12 @@ public class CourseItemDialog extends DialogFragment  {
 		
 		itemWeightEditText = (EditText) view.findViewById(R.id.etPercentWorth);
 		itemGradeEditText = (EditText) view.findViewById(R.id.etPercentMark);
+		
+		if (modifyItem != null) { // if modifying an item
+			itemNameEditText.setText(modifyItem.itemName.toString());
+			itemWeightEditText.setText(String.valueOf(modifyItem.itemPercentWorth));
+			itemGradeEditText.setText(String.valueOf(modifyItem.itemAchievedGrade));
+		}
 		
 		cancelButton = (Button) view.findViewById(R.id.bCancel);
 		saveButton = (Button) view.findViewById(R.id.bOk);
@@ -82,9 +95,20 @@ public class CourseItemDialog extends DialogFragment  {
 			CourseItemDialogListener callingActivity = (CourseItemDialogListener) getActivity();
 			
 			// Generate a course item
+			double itemWeight = -1;
+			double itemGrade = -1;
+			try {
+				itemWeight = Double.parseDouble(itemWeightEditText.getText().toString());
+				itemGrade = Double.parseDouble(itemGradeEditText.getText().toString());
+			}
+			
+			catch(Exception e) {
+			}
+			
 			CourseItem newItem = new CourseItem(itemNameEditText.getText().toString(), 
-												(double) Double.parseDouble(itemWeightEditText.getText().toString()), 
-												(double) Double.parseDouble(itemGradeEditText.getText().toString()));
+												itemWeight,
+												-1, // NEED TO CHANGE ONCE HAVE DESIRED IN DIALOG
+												itemGrade);
 			callingActivity.AddItemToList(newItem);
 			
 			// TODO update course here
