@@ -19,6 +19,7 @@ package com.weight.generator;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,7 +63,9 @@ public class CourseItemDialog extends DialogFragment  {
 		getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		
 		itemWeightEditText = (EditText) view.findViewById(R.id.etPercentWorth);
+		itemWeightEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
 		itemGradeEditText = (EditText) view.findViewById(R.id.etPercentMark);
+		itemGradeEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
 		
 		if (modifyItem != null) { // if modifying an item
 			itemNameEditText.setText(modifyItem.itemName.toString());
