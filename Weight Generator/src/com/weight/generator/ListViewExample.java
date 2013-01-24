@@ -53,7 +53,7 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list);
+		setContentView(R.layout.course_list);
 		mainListView = (ListView) findViewById(R.id.mainListView);
 		
 //		String[] courseItems = new String[] { "Add New Entry" };
@@ -67,7 +67,7 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 		this.AddItemToList(defaultItem); // Load in default item
 		
 		// Create ArrayAdapter to load into ListView using the list of course items
-		arrayAdapter = new CourseItemAdapter(ListViewExample.this, R.layout.row_element, courseItemList);
+		arrayAdapter = new CourseItemAdapter(ListViewExample.this, R.layout.course_element, courseItemList);
 //		listAdapter = new ArrayAdapter<CourseItem>(this, R.layout.row_row, courseItemList);
 
 		// Add more items. If you passed a String[] instead of a List<String>
