@@ -55,9 +55,12 @@ public class CourseItemAdapter extends ArrayAdapter<CourseItem>{
 		itemDesiredGradeString = (itemDesiredGrade == -1.)? "N/A" : String.valueOf(itemDesiredGrade);
 		
 		// Assign the appropriate data from item object above
-		itemRowText.setText(itemName);
-		itemRowGrade.setText(itemAchievedGradeString);
-		itemRowDesired.setText(itemDesiredGradeString);
+		//The next three lines were causing errors when trying to run the app so they have
+		//been commented out.
+		
+		//itemRowText.setText(itemName);
+		//itemRowGrade.setText(itemAchievedGradeString);
+		//itemRowDesired.setText(itemDesiredGradeString);
 		
 		return itemView;
 	}
