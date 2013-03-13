@@ -35,7 +35,6 @@ public class CourseItemDialog extends DialogFragment  {
 	private EditText itemNameEditText;
 	private EditText itemWeightEditText;
 	private EditText itemGradeEditText;
-	private EditText itemDesiredEditText;
 	private Button cancelButton;
 	private Button saveButton;
 	private CourseItem modifyItem;
@@ -86,11 +85,7 @@ public class CourseItemDialog extends DialogFragment  {
 		getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		
 		itemWeightEditText = (EditText) view.findViewById(R.id.etPercentWorth);
-		itemWeightEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
 		itemGradeEditText = (EditText) view.findViewById(R.id.etPercentMark);
-		itemGradeEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
-		itemDesiredEditText = (EditText) view.findViewById(R.id.etPercentDesired);
-		itemDesiredEditText.setFilters(new InputFilter[] { new InputPercentFilter("0", "100")});
 		
 		if (itemIndex != -1) { // if modifying an item
 			callingActivity = (CourseItemDialogListener) getActivity();
@@ -98,7 +93,11 @@ public class CourseItemDialog extends DialogFragment  {
 			itemNameEditText.setText(modifyItem.itemName.toString());
 			itemWeightEditText.setText(String.valueOf(modifyItem.itemPercentWorth));
 			itemGradeEditText.setText(String.valueOf(modifyItem.itemAchievedGrade));
-			itemDesiredEditText.setText(String.valueOf(modifyItem.itemDesiredGrade));
+		}
+		
+		else {
+				itemWeightEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0.0", "100.0")});
+				itemGradeEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0.0", "100.0")});
 		}
 		
 		cancelButton = (Button) view.findViewById(R.id.bCancel);
@@ -128,11 +127,9 @@ public class CourseItemDialog extends DialogFragment  {
 			// Generate a course item
 			double itemWeight = -1;
 			double itemGrade = -1;
-			double itemDesired = -1;
 			try {
 				itemWeight = Double.parseDouble(itemWeightEditText.getText().toString());
 				itemGrade = Double.parseDouble(itemGradeEditText.getText().toString());
-				itemDesired = Double.parseDouble(itemDesiredEditText.getText().toString());
 			}
 			
 			catch(Exception e) {
@@ -140,9 +137,8 @@ public class CourseItemDialog extends DialogFragment  {
 			
 			CourseItem newItem = new CourseItem(itemNameEditText.getText().toString(), 
 												itemWeight,
-												itemDesired,
 												itemGrade);
-			callingActivity.AddItemToList(newItem);
+			callingActivity.AddItemToAdapter(newItem, itemIndex);
 			
 			// TODO update course here
 			// for now just dismiss

@@ -34,8 +34,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class ListViewExample extends FragmentActivity implements CourseItemDialogListener {
+	
+	final int DEFAULT_INDEX = -1;
+	
 	private ListView mainListView;
-	private CourseItemAdapter arrayAdapter;
+	private CourseItemAdapter courseItemAdapter;
 	private CourseItemDialog courseItemDialog;
 	private ArrayList<CourseItem> courseItemList = new ArrayList<CourseItem>();
 	
@@ -52,29 +55,18 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.course_list);
+		setContentView(R.layout.course_element_list);
 		mainListView = (ListView) findViewById(R.id.mainListView);
 		
-//		String[] courseItems = new String[] { "Add New Entry" };
-//		ArrayList<String> planetList = new ArrayList<String>();
-//		planetList.addAll(Arrays.asList(courseItems));
-//		// Create ArrayAdapter using the planet list.
-//		listAdapter = new ArrayAdapter<String>(this, R.layout.row_row,
-//				planetList);
+		CourseItem defaultItem = new CourseItem(" Add New Entry ", 0, 0);
 		
-		CourseItem defaultItem = new CourseItem(" Add New Entry ", 0, 0, 0);
-		this.AddItemToList(defaultItem); // Load in default item
-		
-		// Create ArrayAdapter to load into ListView using the list of course items
-		arrayAdapter = new CourseItemAdapter(ListViewExample.this, R.layout.course_element, courseItemList);
-//		listAdapter = new ArrayAdapter<CourseItem>(this, R.layout.row_row, courseItemList);
+		// Create array adapter to load into ListView using the list of course items
+		courseItemAdapter = new CourseItemAdapter(ListViewExample.this, R.layout.course_element, courseItemList);
 
-		// Add more items. If you passed a String[] instead of a List<String>
-		// into the ArrayAdapter constructor, you must not add more items.
-		// Otherwise an exception will occur.
+		this.AddItemToAdapter(defaultItem, DEFAULT_INDEX); // Load in default item
 		
 		// Set the ArrayAdapter as the ListView's adapter.
-		mainListView.setAdapter(arrayAdapter);
+		mainListView.setAdapter(courseItemAdapter);
 		mainListView.setOnItemClickListener(courseItemClickListener);
 	}
 
@@ -93,17 +85,26 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 
 	// Method to add item to courseItemList (from dialog); 
 	// fulfills interface contract requirements
-	public void AddItemToList(CourseItem newItem) {
+	public void AddItemToAdapter(CourseItem newItem, int itemIndex) {
 		// Check if the item already exists
-		if (!courseItemList.contains(newItem)) {
-			courseItemList.add(courseItemList.size(), newItem); // Add to end
+		if (itemIndex != DEFAULT_INDEX) {
+			CourseItem modifyItem = courseItemAdapter.getItem(itemIndex);
+			courseItemAdapter.remove(modifyItem);
+			courseItemAdapter.insert(newItem, itemIndex);
 		}
-		else {
-			// Modify the current item
-			int position = courseItemList.indexOf(newItem);
-			courseItemList.remove(newItem);
-			courseItemList.add(position, newItem);
-		}
+		else
+			courseItemAdapter.add(newItem);
+		
+//		if (!courseItemList.contains(newItem)) {
+//			courseItemList.add(courseItemList.size(), newItem); // Add to end
+//		}
+//		
+//		else {
+//			// Modify the current item
+//			int position = courseItemList.indexOf(newItem);
+//			courseItemList.remove(newItem);
+//			courseItemList.add(position, newItem);
+//		}
 		
 		// TODO TEST TOAST notification
 		Toast.makeText(this, newItem.itemName.toString(), Toast.LENGTH_SHORT).show();

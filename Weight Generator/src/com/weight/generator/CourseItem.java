@@ -6,20 +6,11 @@ public class CourseItem {
 	String itemName;
 	double itemPercentWorth;
 	double itemAchievedGrade;
-	double itemDesiredGrade;
-	
-	// Constructor
-	CourseItem(String name, double worth, double desired) {
-		this.itemName = name;
-		this.itemPercentWorth = worth;
-		this.itemDesiredGrade = desired;
-	}
 	
 	// Overloaded
-	CourseItem(String name, double worth, double desired, double achieved) {
+	CourseItem(String name, double worth, double achieved) {
 		this.itemName = name;
 		this.itemPercentWorth = worth;
-		this.itemDesiredGrade = desired;
 		this.itemAchievedGrade = achieved;
 	}
 	

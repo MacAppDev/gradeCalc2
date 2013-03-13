@@ -42,22 +42,22 @@ public class CourseItemAdapter extends ArrayAdapter<CourseItem>{
 		// Get the text boxes from the row
 		TextView itemRowText = (TextView) itemView.findViewById(R.id.tvName);
 		TextView itemRowGrade = (TextView) itemView.findViewById(R.id.tvAvg);
-		TextView itemRowDesired = (TextView) itemView.findViewById(R.id.tvDesired);
+		TextView itemRowWeight = (TextView) itemView.findViewById(R.id.tvDesired);
 		
 		String itemName = courseItem.itemName.toString();
 		double itemAchievedGrade = courseItem.itemAchievedGrade;
 		String itemAchievedGradeString;
-		double itemDesiredGrade = courseItem.itemDesiredGrade;
-		String itemDesiredGradeString;
+		double itemPercentWorth = courseItem.itemPercentWorth;
+		String itemPercentWorthString;
 		
 		itemAchievedGradeString = (itemAchievedGrade == -1.)? "N/A" : String.valueOf(itemAchievedGrade);
-		itemDesiredGradeString = (itemDesiredGrade == -1.)? "N/A" : String.valueOf(itemDesiredGrade);
+		itemPercentWorthString = (itemPercentWorth == -1.)? "N/A" : String.valueOf(itemPercentWorth);
 		
 		// Assign the appropriate data from item object above
 		
 		itemRowText.setText(itemName);
 		itemRowGrade.setText(itemAchievedGradeString);
-		itemRowDesired.setText(itemDesiredGradeString);
+		itemRowWeight.setText(itemPercentWorthString);
 		
 		return itemView;
 	}
