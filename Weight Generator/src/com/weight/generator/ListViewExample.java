@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 public class ListViewExample extends FragmentActivity implements CourseItemDialogListener {
 	private ListView mainListView;
-	private ArrayAdapter<CourseItem> listAdapter;
 	private CourseItemAdapter arrayAdapter;
 	private CourseItemDialog courseItemDialog;
 	private ArrayList<CourseItem> courseItemList = new ArrayList<CourseItem>();
@@ -88,7 +87,7 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 	// Method to invoke the modify/add item dialog
 	private void showCourseItemDialog(int itemIndex) {
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		courseItemDialog = new CourseItemDialog();
+		courseItemDialog = CourseItemDialog.newInstance(itemIndex);
 		courseItemDialog.show(fragmentManager, "Edit Item Dialog");
 	}
 
@@ -99,8 +98,19 @@ public class ListViewExample extends FragmentActivity implements CourseItemDialo
 		if (!courseItemList.contains(newItem)) {
 			courseItemList.add(courseItemList.size(), newItem); // Add to end
 		}
+		else {
+			// Modify the current item
+			int position = courseItemList.indexOf(newItem);
+			courseItemList.remove(newItem);
+			courseItemList.add(position, newItem);
+		}
 		
 		// TODO TEST TOAST notification
 		Toast.makeText(this, newItem.itemName.toString(), Toast.LENGTH_SHORT).show();
+	}
+	
+	// Allow dialog to retrieve values from item being modified
+	public CourseItem GetItem(int index) {
+		return courseItemList.get(index);
 	}
 }

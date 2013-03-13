@@ -35,10 +35,28 @@ public class CourseItemDialog extends DialogFragment  {
 	private EditText itemNameEditText;
 	private EditText itemWeightEditText;
 	private EditText itemGradeEditText;
+	private EditText itemDesiredEditText;
 	private Button cancelButton;
 	private Button saveButton;
-	
 	private CourseItem modifyItem;
+	private CourseItemDialogListener callingActivity;
+	
+	int itemIndex;
+	
+    /**
+     * Create a new instance of CourseItemDialog, providing "index"
+     * as an argument.
+     */
+    static CourseItemDialog newInstance(int index) {
+        CourseItemDialog f = new CourseItemDialog();
+
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        args.putInt("index", index);
+        f.setArguments(args);
+
+        return f;
+    }
 	
 	public interface EditNameDialogListener {
 		void onFinishEditDialog(String inputText);
@@ -47,15 +65,20 @@ public class CourseItemDialog extends DialogFragment  {
 		// Empty constructor required for DialogFragment
 	}
 	
-	public CourseItemDialog(CourseItem item) {
-		// Constructor to modify course data in dialog
-		modifyItem = item;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		itemIndex = getArguments().getInt("index");
 	}
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog, container);
-		getDialog().setTitle("Change Course Item"); // TODO Use a resource for the dialog title
+		if (itemIndex == -1) // If new item
+			getDialog().setTitle("New Course Item");
+		else
+			getDialog().setTitle("Change Course Item"); // TODO Use a resource for the dialog title
 		
 		itemNameEditText = (EditText) view.findViewById(R.id.etAssName);
 //		// Show keyboard automatically
@@ -66,11 +89,16 @@ public class CourseItemDialog extends DialogFragment  {
 		itemWeightEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
 		itemGradeEditText = (EditText) view.findViewById(R.id.etPercentMark);
 		itemGradeEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
+		itemDesiredEditText = (EditText) view.findViewById(R.id.etPercentDesired);
+		itemDesiredEditText.setFilters(new InputFilter[] { new InputPercentFilter("0", "100")});
 		
-		if (modifyItem != null) { // if modifying an item
+		if (itemIndex != -1) { // if modifying an item
+			callingActivity = (CourseItemDialogListener) getActivity();
+			modifyItem = callingActivity.GetItem(itemIndex);
 			itemNameEditText.setText(modifyItem.itemName.toString());
 			itemWeightEditText.setText(String.valueOf(modifyItem.itemPercentWorth));
 			itemGradeEditText.setText(String.valueOf(modifyItem.itemAchievedGrade));
+			itemDesiredEditText.setText(String.valueOf(modifyItem.itemDesiredGrade));
 		}
 		
 		cancelButton = (Button) view.findViewById(R.id.bCancel);
@@ -95,14 +123,16 @@ public class CourseItemDialog extends DialogFragment  {
 		public void onClick(View arg0) {
 			
 			// Retrieve a reference to the activity that originally invoked the dialog
-			CourseItemDialogListener callingActivity = (CourseItemDialogListener) getActivity();
+			callingActivity = (CourseItemDialogListener) getActivity();
 			
 			// Generate a course item
 			double itemWeight = -1;
 			double itemGrade = -1;
+			double itemDesired = -1;
 			try {
 				itemWeight = Double.parseDouble(itemWeightEditText.getText().toString());
 				itemGrade = Double.parseDouble(itemGradeEditText.getText().toString());
+				itemDesired = Double.parseDouble(itemDesiredEditText.getText().toString());
 			}
 			
 			catch(Exception e) {
@@ -110,7 +140,7 @@ public class CourseItemDialog extends DialogFragment  {
 			
 			CourseItem newItem = new CourseItem(itemNameEditText.getText().toString(), 
 												itemWeight,
-												-1, // NEED TO CHANGE ONCE HAVE DESIRED IN DIALOG
+												itemDesired,
 												itemGrade);
 			callingActivity.AddItemToList(newItem);
 			
