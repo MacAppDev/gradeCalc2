@@ -16,7 +16,7 @@
             android:id="@+id/listHeader1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="70"
+            android:layout_weight="56"
             android:gravity="center"
             android:padding="10dp"
             android:text="Course Item"
@@ -26,10 +26,20 @@
             android:id="@+id/listHeader2"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="30"
+            android:layout_weight="22"
             android:gravity="center"
             android:padding="10dp"
             android:text="Grade"
+            android:textStyle="bold" />
+        
+        <TextView 
+            android:id="@+id/listHeader3"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="22"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Weight"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -45,9 +55,19 @@
         android:id="@+id/addItem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/mainListView"
         android:padding="10dp"
         android:text="Add Item" >
     </Button>
-
+    
+    <Button
+        android:id="@+id/calcNeeded"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+		android:padding="10dp"
+		android:text="Calculate Needed" >
+    </Button>
+    
+    
 </RelativeLayout>
