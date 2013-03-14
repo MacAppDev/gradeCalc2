@@ -85,11 +85,8 @@ public class ListViewExample extends FragmentActivity implements
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				// adds new item to the list
-				newItem = new CourseItem("New Item", 0, 0);
-				AddItemToAdapter(newItem, DEFAULT_INDEX);
-				// shows dialog for the new item
-				showCourseItemDialog(courseItemAdapter.getCount() - 1);
+				// adds new item to the list AND shows dialog for the new item
+				showCourseItemDialog(DEFAULT_INDEX);
 			}
 
 		});
