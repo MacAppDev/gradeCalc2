@@ -96,8 +96,8 @@ public class CourseItemDialog extends DialogFragment  {
 		}
 		
 		else {
-				itemWeightEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0.0", "100.0")});
-				itemGradeEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0.0", "100.0")});
+				itemWeightEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
+				itemGradeEditText.setFilters(new InputFilter[]{ new InputPercentFilter("0", "100")});
 		}
 		
 		cancelButton = (Button) view.findViewById(R.id.bCancel);
