@@ -36,7 +36,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class ListViewExample extends FragmentActivity implements
-		CourseItemDialogListener {
+		CourseItemDialogListener<CourseItem> {
 
 	final int DEFAULT_INDEX = -1;
 	private Button bAddNewItem;

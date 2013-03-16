@@ -17,6 +17,7 @@ public final class R {
     public static final class id {
         public static final int addItem=0x7f07000a;
         public static final int bAddItem=0x7f070008;
+        public static final int bCalcNeeded=0x7f07000b;
         public static final int bCancel=0x7f07000e;
         public static final int bOk=0x7f07000f;
         public static final int calcNeeded=0x7f070009;
@@ -29,9 +30,8 @@ public final class R {
         public static final int listHeader3=0x7f070006;
         public static final int mainListView=0x7f070007;
         public static final int menu_settings=0x7f070014;
-        public static final int sCourseDropdown=0x7f07000c;
         public static final int tvAvg=0x7f070001;
-        public static final int tvCourse=0x7f07000b;
+        public static final int tvCourse=0x7f07000c;
         public static final int tvDesired=0x7f070002;
         public static final int tvName=0x7f070000;
         public static final int tvPercentEach=0x7f070011;
@@ -54,6 +54,7 @@ public final class R {
         public static final int hello_world=0x7f040001;
         public static final int menu_settings=0x7f040002;
         public static final int title_activity_list_view_example=0x7f040003;
+        public static final int title_course_list_activity=0x7f040008;
         public static final int title_main_activity=0x7f040004;
         public static final int tvCourse=0x7f040006;
         public static final int tvGradeGoal=0x7f040007;

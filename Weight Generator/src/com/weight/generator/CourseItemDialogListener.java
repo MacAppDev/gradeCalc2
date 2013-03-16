@@ -1,8 +1,10 @@
+//Note: I changed this to be generic and accept both CourseItems and Courses -Evan
+
 package com.weight.generator;
 
-public interface CourseItemDialogListener {
+public interface CourseItemDialogListener<Type> {
 	
-	public void AddItemToAdapter(CourseItem newItem, int itemIndex);
-	public CourseItem GetItem(int index);
+	public void AddItemToAdapter(Type newItem, int itemIndex);
+	public Type GetItem(int index);
 
 }

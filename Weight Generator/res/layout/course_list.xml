@@ -19,7 +19,7 @@
             android:layout_weight="60"
             android:gravity="center"
             android:padding="10dp"
-            android:text="Course Item"
+            android:text="Course"
             android:textStyle="bold" />
 
         <TextView
@@ -58,5 +58,14 @@
         android:padding="10dp"
         android:text="Add Item" >
     </Button>
+
+    <Button
+        android:id="@+id/bCalcNeeded"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:padding="10dp"
+        android:text="What I Need" />
 
 </RelativeLayout>

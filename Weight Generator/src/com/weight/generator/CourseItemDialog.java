@@ -39,7 +39,7 @@ public class CourseItemDialog extends DialogFragment {
 	private Button cancelButton;
 	private Button saveButton;
 	private CourseItem modifyItem;
-	private CourseItemDialogListener callingActivity;
+	private CourseItemDialogListener<CourseItem> callingActivity;
 
 	int itemIndex;
 
@@ -92,7 +92,7 @@ public class CourseItemDialog extends DialogFragment {
 		itemGradeEditText = (EditText) view.findViewById(R.id.etPercentMark);
 
 		if (itemIndex != -1) { // if modifying an item
-			callingActivity = (CourseItemDialogListener) getActivity();
+			callingActivity = (CourseItemDialogListener<CourseItem>) getActivity();
 			modifyItem = callingActivity.GetItem(itemIndex);
 			itemNameEditText.setText(modifyItem.itemName.toString());
 			if (modifyItem.itemPercentWorth != -1)
@@ -136,9 +136,9 @@ public class CourseItemDialog extends DialogFragment {
 
 			// Retrieve a reference to the activity that originally invoked the
 			// dialog
-			callingActivity = (CourseItemDialogListener) getActivity();
+			callingActivity = (CourseItemDialogListener<CourseItem>) getActivity();
 			// if there is no Assignment name inserted
-			if (itemNameEditText.getText().toString() == "") {
+			if (itemNameEditText.getText().toString().trim().length() > 0) {
 				// Generate a course item
 				double itemWeight = -1;
 				double itemGrade = -1;

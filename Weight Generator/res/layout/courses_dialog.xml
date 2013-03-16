@@ -10,22 +10,19 @@
         android:orientation="horizontal"
         android:weightSum="100" >
 
-        <TextView
+        <EditText
             android:id="@+id/tvCourse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_weight="70"
-            android:text="@string/tvCourse"
-            android:textSize="20dp" />
+            android:ems="10"
+            android:hint=" Course Name "
+            android:textSize="20dp" >
 
-        <Spinner
-            android:id="@+id/sCourseDropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_weight="30" />
+            <requestFocus />
+        </EditText>
+
     </LinearLayout>
 
     <LinearLayout
