@@ -51,9 +51,6 @@ public class ListViewExample extends FragmentActivity implements
 	private OnItemClickListener courseItemClickListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> arg0, View arg1,
 				int currentItemIndex, long arg3) {
-			Toast.makeText(ListViewExample.this,
-					String.valueOf(currentItemIndex), Toast.LENGTH_SHORT)
-					.show();
 			showCourseItemDialog(currentItemIndex);
 		}
 	};

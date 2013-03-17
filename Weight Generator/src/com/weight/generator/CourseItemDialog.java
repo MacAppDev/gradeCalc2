@@ -42,6 +42,8 @@ public class CourseItemDialog extends DialogFragment {
 	private Button saveButton;
 	private CourseItem modifyItem;
 	private CourseItemDialogListener<CourseItem> callingActivity;
+	
+	final int NULL_VALUE = -1;
 
 	int itemIndex;
 
@@ -97,7 +99,9 @@ public class CourseItemDialog extends DialogFragment {
 		modifyItem = callingActivity.GetItem(itemIndex);
 		if (modifyItem != null) {
 			itemNameEditText.setText(modifyItem.itemName.toString());
-			itemWeightEditText.setText(String.valueOf(modifyItem.itemPercentWorth));
+			if (modifyItem.itemPercentWorth != NULL_VALUE)
+				itemWeightEditText.setText(String.valueOf(modifyItem.itemPercentWorth));
+			if (modifyItem.itemAchievedGrade != NULL_VALUE)
 			itemGradeEditText.setText(String.valueOf(modifyItem.itemAchievedGrade));
 		}
 
@@ -152,13 +156,11 @@ public class CourseItemDialog extends DialogFragment {
 			// if there is no Assignment name inserted
 			if (itemNameEditText.getText().toString().trim().length() > 0) {
 				// Generate a course item
-				double itemWeight = -1;
-				double itemGrade = -1;
+				double itemWeight = NULL_VALUE;
+				double itemGrade = NULL_VALUE;
 				try {
-					itemWeight = Double.parseDouble(itemWeightEditText
-							.getText().toString());
-					itemGrade = Double.parseDouble(itemGradeEditText.getText()
-							.toString());
+					itemWeight = Double.parseDouble(itemWeightEditText.getText().toString());
+					itemGrade = Double.parseDouble(itemGradeEditText.getText().toString());
 				}
 
 				catch (Exception e) {

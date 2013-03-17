@@ -48,7 +48,11 @@ public class CourseAdapter extends ArrayAdapter<Course>{
 		
 		courseRowName.setText(course.courseName.toString());
 		courseRowGoal.setText(String.valueOf(course.courseGoal));
-		courseRowGrade.setText(String.format("%.2f", course.courseGrade));
+		
+		if (Double.isNaN(course.courseGrade))
+			courseRowGrade.setText("N/A");
+		else
+			courseRowGrade.setText(String.format("%.2f", course.courseGrade));
 		
 		return itemView;
 	}

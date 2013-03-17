@@ -147,21 +147,21 @@ public class CourseDialog extends DialogFragment {
 			// Retrieve a reference to the activity that originally invoked the
 			// dialog
 			callingActivity = (CourseItemDialogListener<Course>) getActivity();
-			// if there is no Assignment name inserted
-			if (itemNameEditText.getText().toString().trim().length() > 0) {
+			
+			
+			String courseName = itemNameEditText.getText().toString().trim();
+			double itemGoal = 0.;
+			try {
+				itemGoal = Double.parseDouble(itemGoalEditText.getText().toString());
+			}
+			catch (Exception e) {
+			}
+			
+			// Ensure that necessary inputs are provided
+			if (courseName.length() > 0 && itemGoal != 0.) {
 				
-				// Generate a course item
-				double itemWeight = -1;
-				try {
-					itemWeight = Double.parseDouble(itemGoalEditText
-							.getText().toString());
-				}
-
-				catch (Exception e) {
-				}
-
 				Course newItem = new Course(itemNameEditText.getText()
-						.toString(), itemWeight);
+						.toString(), itemGoal);
 				callingActivity.AddItemToAdapter(newItem, itemIndex);
 
 				// TODO update course here
@@ -172,7 +172,7 @@ public class CourseDialog extends DialogFragment {
 			} else {
 				// Prints out message if there is no Assignment name
 				Toast.makeText((Context) getActivity(),
-						(String) ("Please type a Name for the entry."),
+						(String) ("Please provide a name and goal for the entry."),
 						Toast.LENGTH_SHORT).show();
 			}
 		}

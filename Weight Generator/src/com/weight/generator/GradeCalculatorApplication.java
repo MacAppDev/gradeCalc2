@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 
 public class GradeCalculatorApplication extends Application {
 	
-	
 	final String DATA_FILENAME = "GradeCalc.data"; // TODO This should be changed to a resource
 	private Map<String, Course> myCourses = new HashMap<String, Course>(); // Collection of courses mapped by name
 	

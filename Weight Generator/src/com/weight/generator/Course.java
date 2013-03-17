@@ -3,12 +3,13 @@ package com.weight.generator;
 import java.util.ArrayList;
 
 public class Course {
-		
+	
 	// Fields
 	String courseName;
 	double courseGoal;
 	double courseGrade;
 	ArrayList<CourseItem> courseItemList;
+	final int NULL_VALUE = -1;
 	
 	// Overloaded
 	Course(String name, double goal) {
@@ -31,6 +32,8 @@ public class Course {
 		double totalWeight = 0.0;
 		double totalGrade = 0.0;
 		for (CourseItem item : courseItemList) {
+			if (item.itemPercentWorth == NULL_VALUE || item.itemAchievedGrade == NULL_VALUE)
+				continue;
 			totalWeight += item.itemPercentWorth;
 			totalGrade += item.itemAchievedGrade * item.itemPercentWorth;
 		}
