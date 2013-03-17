@@ -16,8 +16,8 @@ public class CourseAdapter extends ArrayAdapter<Course>{
 	Context context;
 	
 	// Initialize adapter
-	public CourseAdapter(Context context, int resource, List<Course> courseItems) {
-		super(context, resource, courseItems);
+	public CourseAdapter(Context context, int resource, List<Course> courses) {
+		super(context, resource, courses);
 		this.resource = resource;
 	}
 	
@@ -25,7 +25,7 @@ public class CourseAdapter extends ArrayAdapter<Course>{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LinearLayout itemView;
 		//Gets the current item object
-		Course courseItem = getItem(position);
+		Course course = getItem(position);
 		
 		//Inflate the view
 		if(convertView == null) {
@@ -40,24 +40,15 @@ public class CourseAdapter extends ArrayAdapter<Course>{
 		}
 		
 		// Get the text boxes from the row
-		TextView itemRowText = (TextView) itemView.findViewById(R.id.tvName);
-		TextView itemRowGrade = (TextView) itemView.findViewById(R.id.tvAvg);
-		TextView itemRowWeight = (TextView) itemView.findViewById(R.id.tvDesired);
-		
-		String itemName = courseItem.itemName.toString();
-		double itemAchievedGrade = courseItem.itemGrade;
-		String itemAchievedGradeString;
-		double itemPercentWorth = courseItem.itemGoal;
-		String itemPercentWorthString;
-		
-		itemAchievedGradeString = (itemAchievedGrade == -1.)? "N/A" : String.valueOf(itemAchievedGrade);
-		itemPercentWorthString = (itemPercentWorth == -1.)? "N/A" : String.valueOf(itemPercentWorth);
+		TextView courseRowName = (TextView) itemView.findViewById(R.id.tvName);
+		TextView courseRowGoal = (TextView) itemView.findViewById(R.id.tvDesired);
+		TextView courseRowGrade = (TextView) itemView.findViewById(R.id.tvAvg);
 		
 		// Assign the appropriate data from item object above
 		
-		itemRowText.setText(itemName);
-		itemRowGrade.setText(itemAchievedGradeString);
-		itemRowWeight.setText(itemPercentWorthString);
+		courseRowName.setText(course.courseName.toString());
+		courseRowGoal.setText(String.valueOf(course.courseGoal));
+		courseRowGrade.setText(String.format("%.2f", course.courseGrade));
 		
 		return itemView;
 	}

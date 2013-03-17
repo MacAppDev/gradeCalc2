@@ -1,6 +1,7 @@
 package com.weight.generator;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -11,7 +12,7 @@ public class GradeCalculatorApplication extends Application {
 	
 	
 	final String DATA_FILENAME = "GradeCalc.data"; // TODO This should be changed to a resource
-	List<List<CourseItem>> GradeInfo; // Contains list of courses, each composed of a list of type CourseItem
+	private Map<String, Course> myCourses = new HashMap<String, Course>(); // Collection of courses mapped by name
 	
 	@Override
 	public void onCreate() {
@@ -21,5 +22,13 @@ public class GradeCalculatorApplication extends Application {
 //		Editor editor = applicationPreferences.edit();
 		
 		// TODO Initialize and load application settings (e.g. language, University grading scheme, username, etc.)
+	}
+	
+	Course getCourse(String courseName) {
+		return myCourses.get(courseName);
+	}
+	
+	Course modifyCourse(String courseName, Course course) {
+		return myCourses.put(courseName, course);
 	}
 }

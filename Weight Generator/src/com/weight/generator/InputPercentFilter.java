@@ -20,12 +20,14 @@ public class InputPercentFilter implements InputFilter {
 	public CharSequence filter(CharSequence source, int start, int end,
 			Spanned dest, int dstart, int dend) {
 		try {
-			
-			double input = Integer.parseInt(dest.toString() + source.toString());
+			double input = Double.parseDouble(dest.toString() + source.toString());
 			if (isInRange(min, max, input))
 				return null;
-		} catch (NumberFormatException nfe) {
+		} 
+		
+		catch (NumberFormatException nfe) {
 		}
+		
 		return "";
 	}
 

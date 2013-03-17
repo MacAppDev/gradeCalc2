@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -40,11 +41,11 @@ public class ListViewExample extends FragmentActivity implements
 
 	final int DEFAULT_INDEX = -1;
 	private Button bAddNewItem;
-	private CourseItem newItem;
 	private ListView mainListView;
 	private CourseItemAdapter courseItemAdapter;
 	private CourseItemDialog courseItemDialog;
-	private ArrayList<CourseItem> courseItemList = new ArrayList<CourseItem>();
+	private Course thisCourse;
+	private GradeCalculatorApplication gradeCalcApp;
 
 	// Listener for clicking on an item in the ListView -> triggers dialog
 	private OnItemClickListener courseItemClickListener = new OnItemClickListener() {
@@ -63,16 +64,15 @@ public class ListViewExample extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.course_element_list);
 		mainListView = (ListView) findViewById(R.id.mainListView);
-
-		CourseItem defaultItem = new CourseItem(" Add New Entry ", 0, 0);
+		String courseName = getIntent().getStringExtra("courseName");
+		gradeCalcApp = (GradeCalculatorApplication)getApplicationContext();
+		thisCourse = gradeCalcApp.getCourse(courseName);
+		
 
 		// Create array adapter to load into ListView using the list of course
 		// items
 		courseItemAdapter = new CourseItemAdapter(ListViewExample.this,
-				R.layout.course_element, courseItemList);
-
-		this.AddItemToAdapter(defaultItem, DEFAULT_INDEX); // Load in default
-		// item
+				R.layout.course_element, thisCourse.courseItemList);
 
 		// Set the ArrayAdapter as the ListView's adapter.
 		mainListView.setAdapter(courseItemAdapter);
@@ -86,11 +86,19 @@ public class ListViewExample extends FragmentActivity implements
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				// adds new item to the list AND shows dialog for the new item
-				showCourseItemDialog(DEFAULT_INDEX);
+				showCourseItemDialog(thisCourse.courseItemList.size());
 			}
 
 		});
 
+	}
+	
+	// When back is pressed to return to calling activity
+	@Override
+	public void onBackPressed() {
+		setResult(RESULT_OK);
+		super.onBackPressed();
+		
 	}
 
 	@Override
@@ -110,31 +118,22 @@ public class ListViewExample extends FragmentActivity implements
 	// fulfills interface contract requirements
 	public void AddItemToAdapter(CourseItem newItem, int itemIndex) {
 		// Check if the item already exists
-		if (itemIndex != DEFAULT_INDEX) {
+		if (thisCourse.courseItemList.size() > itemIndex) {
 			CourseItem modifyItem = courseItemAdapter.getItem(itemIndex);
 			courseItemAdapter.remove(modifyItem);
 			courseItemAdapter.insert(newItem, itemIndex);
 		} else
 			courseItemAdapter.add(newItem);
-
-		// if (!courseItemList.contains(newItem)) {
-		// courseItemList.add(courseItemList.size(), newItem); // Add to end
-		// }
-		//
-		// else {
-		// // Modify the current item
-		// int position = courseItemList.indexOf(newItem);
-		// courseItemList.remove(newItem);
-		// courseItemList.add(position, newItem);
-		// }
-
-		// TODO TEST TOAST notification
-		Toast.makeText(this, newItem.itemName.toString(), Toast.LENGTH_SHORT)
-				.show();
+		
+		thisCourse.modifyCourseItem(itemIndex, newItem);
+		gradeCalcApp.modifyCourse(thisCourse.GetCourseName(), thisCourse);
 	}
 
 	// Allow dialog to retrieve values from item being modified
-	public CourseItem GetItem(int index) {
-		return courseItemList.get(index);
+	public CourseItem GetItem(int itemIndex) {
+		if (thisCourse.courseItemList.size() > itemIndex)
+			return thisCourse.courseItemList.get(itemIndex);
+		else
+			return null;
 	}
 }

@@ -22,7 +22,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,11 +38,10 @@ public class CourseDialog extends DialogFragment {
 
 	// Declare fields for user input text boxes
 	private EditText itemNameEditText;
-	private EditText itemGoalEditText;
-	private EditText itemGradeEditText;
+	private EditText itemGoalEditText;  
 	private Button cancelButton;
 	private Button saveButton;
-	private Course modifyItem;
+	private Course modifyCourse;
 	private CourseItemDialogListener<Course> callingActivity;
 
 	int itemIndex;
@@ -92,21 +93,36 @@ public class CourseDialog extends DialogFragment {
 
 		itemGoalEditText = (EditText) view.findViewById(R.id.etPercentWorth);
 
-		if (itemIndex != -1) { // if modifying an item
-			callingActivity = (CourseItemDialogListener<Course>) getActivity();
-			modifyItem = callingActivity.GetItem(itemIndex);
-			itemNameEditText.setText(modifyItem.itemName.toString());
-			if (modifyItem.itemGoal != -1)
-				itemGoalEditText.setText(String
-						.valueOf(modifyItem.itemGoal));
+		callingActivity = (CourseItemDialogListener<Course>) getActivity();
+		modifyCourse = callingActivity.GetItem(itemIndex);
+		if (modifyCourse != null)
+		{
+			itemNameEditText.setText(modifyCourse.courseName.toString());
+			itemGoalEditText.setText(String.valueOf(modifyCourse.courseGoal));
 		}
-
-		else {
-			itemGoalEditText
-					.setFilters(new InputFilter[] { new InputPercentFilter("0",
-							"100") });
-		}
-
+		
+		// Set input filters to limit length and prevent '\n' occurrences
+		itemNameEditText.setFilters(new InputFilter[] {
+				new InputFilter.LengthFilter(20)});
+		itemNameEditText.addTextChangedListener(new TextWatcher() {
+	        public void onTextChanged(CharSequence s, int start, int before, int count) {
+	        }
+	        public void beforeTextChanged(CharSequence s, int start, int count,
+	                int after) {
+	      }
+	        public void afterTextChanged(Editable s) {
+	            for(int i = s.length(); i > 0; i--){
+	                if(s.subSequence(i-1, i).toString().equals("\n"))
+	                     s.replace(i-1, i, "");
+	            }
+	        }
+	    });
+		
+		
+		itemGoalEditText.setFilters(new InputFilter[] { 
+				new InputPercentFilter(0.0, 100.0)
+				, new InputFilter.LengthFilter(4)});
+		
 		cancelButton = (Button) view.findViewById(R.id.bCancel);
 		saveButton = (Button) view.findViewById(R.id.bOk);
 
@@ -136,7 +152,6 @@ public class CourseDialog extends DialogFragment {
 				
 				// Generate a course item
 				double itemWeight = -1;
-				double itemGrade = -1;
 				try {
 					itemWeight = Double.parseDouble(itemGoalEditText
 							.getText().toString());
@@ -146,12 +161,11 @@ public class CourseDialog extends DialogFragment {
 				}
 
 				Course newItem = new Course(itemNameEditText.getText()
-						.toString(), itemWeight, 0);
+						.toString(), itemWeight);
 				callingActivity.AddItemToAdapter(newItem, itemIndex);
 
 				// TODO update course here
-				Intent intent = new Intent(getActivity(), ListViewExample.class);
-			    startActivity(intent);
+
 				// for now just dismiss
 				CourseDialog.this.dismiss();
 				

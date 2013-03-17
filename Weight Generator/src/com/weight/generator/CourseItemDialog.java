@@ -20,7 +20,9 @@ package com.weight.generator;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -76,7 +78,7 @@ public class CourseItemDialog extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog, container);
-		if (itemIndex == -1) // If new item
+		if (itemIndex == 0) // If new item
 			getDialog().setTitle("New Course Item");
 		else
 			getDialog().setTitle("Change Course Item"); // TODO Use a resource
@@ -91,27 +93,37 @@ public class CourseItemDialog extends DialogFragment {
 		itemWeightEditText = (EditText) view.findViewById(R.id.etPercentWorth);
 		itemGradeEditText = (EditText) view.findViewById(R.id.etPercentMark);
 
-		if (itemIndex != -1) { // if modifying an item
-			callingActivity = (CourseItemDialogListener<CourseItem>) getActivity();
-			modifyItem = callingActivity.GetItem(itemIndex);
+		callingActivity = (CourseItemDialogListener<CourseItem>) getActivity();
+		modifyItem = callingActivity.GetItem(itemIndex);
+		if (modifyItem != null) {
 			itemNameEditText.setText(modifyItem.itemName.toString());
-			if (modifyItem.itemPercentWorth != -1)
-				itemWeightEditText.setText(String
-						.valueOf(modifyItem.itemPercentWorth));
-			if (modifyItem.itemAchievedGrade != -1)
-				itemGradeEditText.setText(String
-						.valueOf(modifyItem.itemAchievedGrade));
-
+			itemWeightEditText.setText(String.valueOf(modifyItem.itemPercentWorth));
+			itemGradeEditText.setText(String.valueOf(modifyItem.itemAchievedGrade));
 		}
 
-		else {
-			itemWeightEditText
-					.setFilters(new InputFilter[] { new InputPercentFilter("0",
-							"100") });
-			itemGradeEditText
-					.setFilters(new InputFilter[] { new InputPercentFilter("0",
-							"100") });
-		}
+		// Set input filters to limit length and prevent '\n' occurrences
+		itemNameEditText.setFilters(new InputFilter[] {
+				new InputFilter.LengthFilter(20)});
+		itemNameEditText.addTextChangedListener(new TextWatcher() {
+	        public void onTextChanged(CharSequence s, int start, int before, int count) {
+	        }
+	        public void beforeTextChanged(CharSequence s, int start, int count,
+	                int after) {
+	      }
+	        public void afterTextChanged(Editable s) {
+	            for(int i = s.length(); i > 0; i--){
+	                if(s.subSequence(i-1, i).toString().equals("\n"))
+	                     s.replace(i-1, i, "");
+	            }
+	        }
+	    });
+		
+		itemWeightEditText.setFilters(new InputFilter[] { 
+				new InputPercentFilter(0.0, 100.0)
+				, new InputFilter.LengthFilter(4)});
+		itemGradeEditText.setFilters(new InputFilter[] {
+				new InputPercentFilter(0.0, 100.0)
+				, new InputFilter.LengthFilter(4)});
 
 		cancelButton = (Button) view.findViewById(R.id.bCancel);
 		saveButton = (Button) view.findViewById(R.id.bOk);
