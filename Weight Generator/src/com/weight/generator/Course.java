@@ -9,6 +9,8 @@ public class Course {
 	double courseGoal;
 	double courseGrade;
 	ArrayList<CourseItem> courseItemList;
+	
+	// Constant
 	final int NULL_VALUE = -1;
 	
 	// Overloaded

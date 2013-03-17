@@ -18,12 +18,25 @@
 
 package com.weight.generator;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,18 +45,27 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class CourseListActivity extends FragmentActivity implements
 		CourseItemDialogListener<Course> {
 
+	// Constants
 	final int INTENT_REQUEST_CODE = 0;
+	final String FILENAME = "MarkMaster_0_8.data";
+	
+	// Fields 
 	private Button bAddNewItem;
 	private ListView mainListView;
 	private CourseAdapter courseAdapter;
 	private CourseDialog courseDialog;
 	private ArrayList<Course> courseList = new ArrayList<Course>();
 	private GradeCalculatorApplication gradeCalcApp;
+	private Gson gson;
+	private FileOutputStream fileOutputStream;
+	private FileInputStream fileInputStream;
+	private InputStreamReader jsonStreamReader;
+	private BufferedReader jsonBufferedReader;
+	private StringBuilder jsonBuilder;
 
 	// Listener for clicking on an item in the ListView -> launches the corresponding
 	// activity to view/edit course items
@@ -75,6 +97,9 @@ public class CourseListActivity extends FragmentActivity implements
 		setContentView(R.layout.course_list);
 		mainListView = (ListView) findViewById(R.id.mainListView);
 		gradeCalcApp = (GradeCalculatorApplication)getApplicationContext();
+		
+		// Load previously saved data from file
+		this.LoadData();
 
 		// Create array adapter to load into ListView using the list of course
 		// items
@@ -85,7 +110,10 @@ public class CourseListActivity extends FragmentActivity implements
 		mainListView.setAdapter(courseAdapter);
 		mainListView.setOnItemClickListener(courseItemClickListener);
 		mainListView.setOnItemLongClickListener(courseItemLongClickListener);
-
+		
+//		// Initialize adapter with existing courses
+		courseAdapter.addAll(gradeCalcApp.myCourses.values());
+		
 		// Set up Add new item button
 		bAddNewItem = (Button) findViewById(R.id.addItem);
 		bAddNewItem.setOnClickListener(new OnClickListener() {
@@ -100,7 +128,66 @@ public class CourseListActivity extends FragmentActivity implements
 		});
 
 	}
+	
+	@Override
+	public void onStop() {
+		gson = new Gson();
+		String jsonString = gson.toJson(gradeCalcApp.myCourses);
+		try {
+			fileOutputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+		} 
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			Log.d("FileNotFoundException", e.toString());
+			e.printStackTrace();
+		}
+//		Log.d("JSON Result", flat);
+		try {
+			fileOutputStream.write(jsonString.getBytes());
+			fileOutputStream.close();
+		} catch (IOException e) {
+			Log.d("IOException", e.toString());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		super.onStop();
+	}
 
+	private void LoadData() {
+		try {
+			fileInputStream = openFileInput(FILENAME);
+			gson = new Gson();
+			jsonStreamReader = new InputStreamReader(fileInputStream);
+			jsonBufferedReader = new BufferedReader(jsonStreamReader);
+			jsonBuilder = new StringBuilder();
+			String line;
+			while ((line = jsonBufferedReader.readLine()) != null)
+				jsonBuilder.append(line);
+			
+			Type t = new TypeToken<Map<String,Course>>() {}.getType();
+			
+			gradeCalcApp.myCourses = (Map<String, Course>) 
+					gson.fromJson(jsonBuilder.toString(), t);
+			Log.d("myCourses", gradeCalcApp.myCourses.toString());
+			
+		} 
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.d("Exception", e.toString());
+			e.printStackTrace();
+		}
+		
+		finally {
+			try {
+				if (fileInputStream != null)
+					fileInputStream.close();
+			}
+			catch (IOException e) {
+			}
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.list, menu);

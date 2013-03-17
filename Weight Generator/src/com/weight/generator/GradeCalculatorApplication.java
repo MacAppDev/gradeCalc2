@@ -4,14 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
 
 public class GradeCalculatorApplication extends Application {
 	
+	// Constants
+	final String FILENAME = "MarkMaster_0_8.data";
+	
+	// Fields
 	final String DATA_FILENAME = "GradeCalc.data"; // TODO This should be changed to a resource
-	private Map<String, Course> myCourses = new HashMap<String, Course>(); // Collection of courses mapped by name
+	public Map<String, Course> myCourses = new HashMap<String, Course>(); // Collection of courses mapped by name
 	
 	@Override
 	public void onCreate() {
