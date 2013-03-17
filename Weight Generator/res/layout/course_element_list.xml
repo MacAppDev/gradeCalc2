@@ -31,8 +31,8 @@
             android:padding="10dp"
             android:text="Grade"
             android:textStyle="bold" />
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/listHeader3"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -41,33 +41,32 @@
             android:padding="10dp"
             android:text="Weight"
             android:textStyle="bold" />
-
     </LinearLayout>
 
     <ListView
         android:id="@+id/mainListView"
         android:layout_width="fill_parent"
-        android:layout_below="@+id/listHeader"
-        android:layout_height="332dp" >
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bAddItem"
+        android:layout_below="@id/listHeader" >
     </ListView>
 
     <Button
         android:id="@+id/bAddItem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mainListView"
+        android:layout_above="@+id/calcNeeded"
         android:padding="10dp"
         android:text="Add Item" >
     </Button>
-    
+
     <Button
         android:id="@+id/calcNeeded"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-		android:padding="10dp"
-		android:text="Calculate Needed" >
+        android:padding="10dp"
+        android:text="Calculate Needed" >
     </Button>
-    
-    
+
 </RelativeLayout>
