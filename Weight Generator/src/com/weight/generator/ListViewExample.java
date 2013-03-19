@@ -99,6 +99,18 @@ public class ListViewExample extends FragmentActivity implements
 		super.onBackPressed();
 		
 	}
+	
+	@Override
+	public void onStop() {
+		gradeCalcApp.SaveAppData();
+		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy() {
+		gradeCalcApp.SaveAppData();
+		super.onDestroy();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,7 +167,6 @@ public class ListViewExample extends FragmentActivity implements
 		AdapterView.AdapterContextMenuInfo info =
 				(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int menuItemIndex = item.getItemId();
-		String[] menuItems = getResources().getStringArray(R.array.contextMenu);
 		
 		switch (menuItemIndex) {
 		case 0:
