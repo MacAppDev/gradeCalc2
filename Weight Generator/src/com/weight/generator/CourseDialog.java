@@ -18,17 +18,28 @@
 
 package com.weight.generator;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,12 +47,13 @@ import android.widget.Toast;
 public class CourseDialog extends DialogFragment {
 
 	// Declare fields for user input text boxes
-	private EditText itemNameEditText;
+	private AutoCompleteTextView itemNameAutoComplete;
 	private EditText itemGoalEditText;  
 	private Button cancelButton;
 	private Button saveButton;
 	private Course modifyCourse;
 	private CourseItemDialogListener<Course> callingActivity;
+	private ArrayAdapter<String> autoCompleteAdapter;
 
 	int itemIndex;
 
@@ -84,9 +96,13 @@ public class CourseDialog extends DialogFragment {
 			getDialog().setTitle("Change Course"); // TODO Use a resource
 														// for the dialog title
 
-		itemNameEditText = (EditText) view.findViewById(R.id.tvCourse);
+		// Set the autocomplete options
+		autoCompleteAdapter = new ArrayAdapter<String>(this.getActivity(), 
+				android.R.layout.simple_dropdown_item_1line, LoadAutoCompleteOptions());
+		itemNameAutoComplete = (AutoCompleteTextView) view.findViewById(R.id.acCourse);
+		itemNameAutoComplete.setAdapter(autoCompleteAdapter);
 		// // Show keyboard automatically
-		itemNameEditText.requestFocus();
+		itemNameAutoComplete.requestFocus();
 		getDialog().getWindow().setSoftInputMode(
 				LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -96,14 +112,14 @@ public class CourseDialog extends DialogFragment {
 		modifyCourse = callingActivity.GetItem(itemIndex);
 		if (modifyCourse != null)
 		{
-			itemNameEditText.setText(modifyCourse.courseName.toString());
+			itemNameAutoComplete.setText(modifyCourse.courseName.toString());
 			itemGoalEditText.setText(String.valueOf(modifyCourse.courseGoal));
 		}
 		
 		// Set input filters to limit length and prevent '\n' occurrences
-		itemNameEditText.setFilters(new InputFilter[] {
+		itemNameAutoComplete.setFilters(new InputFilter[] {
 				new InputFilter.LengthFilter(20)});
-		itemNameEditText.addTextChangedListener(new TextWatcher() {
+		itemNameAutoComplete.addTextChangedListener(new TextWatcher() {
 	        public void onTextChanged(CharSequence s, int start, int before, int count) {
 	        }
 	        public void beforeTextChanged(CharSequence s, int start, int count,
@@ -148,7 +164,7 @@ public class CourseDialog extends DialogFragment {
 			callingActivity = (CourseItemDialogListener<Course>) getActivity();
 			
 			
-			String courseName = itemNameEditText.getText().toString().trim();
+			String courseName = itemNameAutoComplete.getText().toString().trim();
 			double itemGoal = 0.;
 			try {
 				itemGoal = Double.parseDouble(itemGoalEditText.getText().toString());
@@ -159,7 +175,7 @@ public class CourseDialog extends DialogFragment {
 			// Ensure that necessary inputs are provided
 			if (courseName.length() > 0 && itemGoal != 0.) {
 				
-				Course newItem = new Course(itemNameEditText.getText()
+				Course newItem = new Course(itemNameAutoComplete.getText()
 						.toString(), itemGoal);
 				callingActivity.AddItemToAdapter(newItem, itemIndex);
 
@@ -176,4 +192,23 @@ public class CourseDialog extends DialogFragment {
 			}
 		}
 	};
+	
+	String[] LoadAutoCompleteOptions() {
+		List<String> lineList = new ArrayList<String>();
+		try {
+			InputStream seedDataStream = getActivity().getAssets().open("CourseSubjects.data");
+			InputStreamReader inputStreamReader = new InputStreamReader(seedDataStream);
+			BufferedReader inputBufferedReader = new BufferedReader(inputStreamReader);
+			String line;
+			while ((line = inputBufferedReader.readLine()) != null)
+				lineList.add(line);
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.d("Exception", e.toString());
+			e.printStackTrace();
+		}
+		return lineList.toArray(new String[lineList.size()]);
+		
+	}
 }

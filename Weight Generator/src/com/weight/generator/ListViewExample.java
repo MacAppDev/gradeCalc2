@@ -21,7 +21,10 @@ package com.weight.generator;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -67,6 +70,9 @@ public class ListViewExample extends FragmentActivity implements
 		// Set the ArrayAdapter as the ListView's adapter.
 		mainListView.setAdapter(courseItemAdapter);
 		mainListView.setOnItemClickListener(courseItemClickListener);
+		
+		// Register for context menu calls to be caught
+		registerForContextMenu(mainListView);
 
 		// Set up Add new item button
 		bAddNewItem = (Button) findViewById(R.id.bAddItem);
@@ -80,6 +86,9 @@ public class ListViewExample extends FragmentActivity implements
 			}
 
 		});
+		
+		// Set up context menu for editing / 
+		
 
 	}
 	
@@ -125,5 +134,43 @@ public class ListViewExample extends FragmentActivity implements
 			return thisCourse.courseItemList.get(itemIndex);
 		else
 			return null;
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		if (v.getId()==R.id.mainListView) {
+			AdapterView.AdapterContextMenuInfo info = 
+					(AdapterView.AdapterContextMenuInfo) menuInfo;
+			menu.setHeaderTitle(thisCourse.courseItemList.get(info.position).itemName);
+			String[] menuItems = getResources().getStringArray(R.array.contextMenu);
+			for (int i = 0; i < menuItems.length; i++) {
+				menu.add(Menu.NONE, i, i, menuItems[i]);
+			}
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info =
+				(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		int menuItemIndex = item.getItemId();
+		String[] menuItems = getResources().getStringArray(R.array.contextMenu);
+		
+		switch (menuItemIndex) {
+		case 0:
+			showCourseItemDialog(info.position);
+			break;
+		case 1:
+			// Delete the item
+			CourseItem deletedItem = thisCourse.deleteCourseItem(info.position);
+			gradeCalcApp.modifyCourse(thisCourse.GetCourseName(), thisCourse);
+			courseItemAdapter.remove(deletedItem);
+			break;
+		default:
+			break;
+		}
+	
+		return true;
 	}
 }

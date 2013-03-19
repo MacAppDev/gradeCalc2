@@ -30,6 +30,13 @@ public class Course {
 		return tempItem;
 	}
 	
+	CourseItem deleteCourseItem(int itemIndex) {
+		CourseItem tempItem = courseItemList.get(itemIndex);
+		courseItemList.remove(itemIndex);
+		this.updateCourseGrade();
+		return tempItem;
+	}
+	
 	double updateCourseGrade() {
 		double totalWeight = 0.0;
 		double totalGrade = 0.0;

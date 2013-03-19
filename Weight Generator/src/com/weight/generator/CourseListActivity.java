@@ -37,8 +37,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -80,15 +83,15 @@ public class CourseListActivity extends FragmentActivity implements
 		}
 	};
 	
-	// Listener for long click on an item in the ListView -> launches course dialog
-	private OnItemLongClickListener courseItemLongClickListener = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> arg0, View arg,
-				int currentItemIndex, long arg3) {
-			
-			showCourseDialog(currentItemIndex);
-			return true;
-		}
-	};
+//	// Listener for long click on an item in the ListView -> launches course dialog
+//	private OnItemLongClickListener courseItemLongClickListener = new OnItemLongClickListener() {
+//		public boolean onItemLongClick(AdapterView<?> arg0, View arg,
+//				int currentItemIndex, long arg3) {
+//			
+//			showCourseDialog(currentItemIndex);
+//			return true;
+//		}
+//	};
 
 	// ENTRY point for activity
 	@Override
@@ -109,10 +112,13 @@ public class CourseListActivity extends FragmentActivity implements
 		// Set the ArrayAdapter as the ListView's adapter.
 		mainListView.setAdapter(courseAdapter);
 		mainListView.setOnItemClickListener(courseItemClickListener);
-		mainListView.setOnItemLongClickListener(courseItemLongClickListener);
+//		mainListView.setOnItemLongClickListener(courseItemLongClickListener);
 		
-//		// Initialize adapter with existing courses
+		// Initialize adapter with existing courses
 		courseAdapter.addAll(gradeCalcApp.myCourses.values());
+		
+		// Register for context menu calls to be caught
+		registerForContextMenu(mainListView);
 		
 		// Set up Add new item button
 		bAddNewItem = (Button) findViewById(R.id.addItem);
@@ -227,6 +233,44 @@ public class CourseListActivity extends FragmentActivity implements
 			if (resultCode == RESULT_OK)
 				courseAdapter.notifyDataSetChanged();
 		}
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		if (v.getId()==R.id.mainListView) {
+			AdapterView.AdapterContextMenuInfo info = 
+					(AdapterView.AdapterContextMenuInfo) menuInfo;
+			menu.setHeaderTitle(courseAdapter.getItem(info.position).GetCourseName());
+			String[] menuItems = getResources().getStringArray(R.array.contextMenu);
+			for (int i = 0; i < menuItems.length; i++) {
+				menu.add(Menu.NONE, i, i, menuItems[i]);
+			}
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info =
+				(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		int menuItemIndex = item.getItemId();
+		String[] menuItems = getResources().getStringArray(R.array.contextMenu);
+		
+		switch (menuItemIndex) {
+		case 0:
+			showCourseDialog(info.position);
+			break;
+		case 1:
+			// Delete the item
+			Course deletedCourse =
+				gradeCalcApp.deleteCourse(courseAdapter.getItem(info.position).GetCourseName());
+			courseAdapter.remove(deletedCourse);
+			break;
+		default:
+			break;
+		}
+	
+		return true;
 	}
 }
 

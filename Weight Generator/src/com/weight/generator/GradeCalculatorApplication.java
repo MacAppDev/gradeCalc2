@@ -31,4 +31,10 @@ public class GradeCalculatorApplication extends Application {
 	Course modifyCourse(String courseName, Course course) {
 		return myCourses.put(courseName, course);
 	}
+	
+	Course deleteCourse(String courseName) {
+		Course tempCourse = myCourses.get(courseName);
+		myCourses.remove(tempCourse);
+		return tempCourse;
+	}
 }
