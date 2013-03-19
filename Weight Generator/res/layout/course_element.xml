@@ -4,7 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="horizontal" 
     android:weightSum="100">
-    android:background="?android:attr/activatedBackgroundIndicator"
 
     <TextView
         android:id="@+id/tvName"

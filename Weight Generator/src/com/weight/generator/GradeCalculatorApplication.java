@@ -1,17 +1,22 @@
 package com.weight.generator;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.Gson;
+
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
 public class GradeCalculatorApplication extends Application {
 	
 	// Constants
 	final String FILENAME = "MarkMaster_0_8.data";
 	
-	// Fields
-	final String DATA_FILENAME = "GradeCalc.data"; // TODO This should be changed to a resource
 	public Map<String, Course> myCourses = new HashMap<String, Course>(); // Collection of courses mapped by name
 	
 	@Override
@@ -34,7 +39,22 @@ public class GradeCalculatorApplication extends Application {
 	
 	Course deleteCourse(String courseName) {
 		Course tempCourse = myCourses.get(courseName);
-		myCourses.remove(tempCourse);
+		myCourses.remove(courseName);
 		return tempCourse;
+	}
+	
+	void SaveAppData() {
+		Gson gson = new Gson();
+		String jsonString = gson.toJson(myCourses);
+		FileOutputStream fileOutputStream;
+		try {
+			fileOutputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+			fileOutputStream.write(jsonString.getBytes());
+			fileOutputStream.close();
+		} catch (Exception e) {
+			Log.d("Exception", e.toString());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

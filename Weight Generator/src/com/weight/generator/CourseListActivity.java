@@ -45,7 +45,6 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -137,27 +136,14 @@ public class CourseListActivity extends FragmentActivity implements
 	
 	@Override
 	public void onStop() {
-		gson = new Gson();
-		String jsonString = gson.toJson(gradeCalcApp.myCourses);
-		try {
-			fileOutputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-		} 
-		catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			Log.d("FileNotFoundException", e.toString());
-			e.printStackTrace();
-		}
-//		Log.d("JSON Result", flat);
-		try {
-			fileOutputStream.write(jsonString.getBytes());
-			fileOutputStream.close();
-		} catch (IOException e) {
-			Log.d("IOException", e.toString());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		gradeCalcApp.SaveAppData();
 		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy() {
+		gradeCalcApp.SaveAppData();
+		super.onDestroy();
 	}
 
 	private void LoadData() {
@@ -254,7 +240,6 @@ public class CourseListActivity extends FragmentActivity implements
 		AdapterView.AdapterContextMenuInfo info =
 				(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int menuItemIndex = item.getItemId();
-		String[] menuItems = getResources().getStringArray(R.array.contextMenu);
 		
 		switch (menuItemIndex) {
 		case 0:
