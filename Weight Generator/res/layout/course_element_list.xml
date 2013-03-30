@@ -17,9 +17,10 @@
             android:id="@+id/listHeader1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="56"
+            android:layout_weight="50"
             android:gravity="center"
             android:padding="10dp"
+			android:textSize="18sp"
             android:text="Course Item"
             android:textStyle="bold" />
 
@@ -27,9 +28,10 @@
             android:id="@+id/listHeader2"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="22"
+            android:layout_weight="25"
             android:gravity="center"
             android:padding="10dp"
+			android:textSize="18sp"
             android:text="Grade"
             android:textStyle="bold" />
 
@@ -37,9 +39,10 @@
             android:id="@+id/listHeader3"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="22"
+            android:layout_weight="25"
             android:gravity="center"
             android:padding="10dp"
+            android:textSize="18sp"
             android:text="Weight"
             android:textStyle="bold" />
     </LinearLayout>

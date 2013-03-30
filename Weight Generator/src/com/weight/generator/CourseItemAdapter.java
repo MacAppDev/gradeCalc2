@@ -66,6 +66,7 @@ public class CourseItemAdapter extends ArrayAdapter<CourseItem>{
 		}
 		else {
 			itemAchievedGradeString = String.valueOf(itemAchievedGrade);
+			itemRowGrade.setTextColor(Color.BLACK);
 		}
 
 		itemPercentWorthString = (itemPercentWorth == NULL_VALUE)? "" : 

@@ -16,30 +16,33 @@
             android:id="@+id/listHeader1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="60"
+            android:layout_weight="50"
             android:gravity="center"
             android:padding="10dp"
             android:text="Course"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/listHeader2"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="20"
+            android:layout_weight="25"
             android:gravity="center"
             android:padding="10dp"
             android:text="Grade"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvDesired"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="20"
+            android:layout_weight="25"
             android:gravity="center"
             android:padding="10dp"
             android:text="Goal"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -55,18 +58,9 @@
         android:id="@+id/addItem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bCalcNeeded"
+        android:layout_alignParentBottom="true"
         android:padding="10dp"
         android:text="Add Item" >
     </Button>
-
-    <Button
-        android:id="@+id/bCalcNeeded"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:padding="10dp"
-        android:text="What I Need" />
 
 </RelativeLayout>
