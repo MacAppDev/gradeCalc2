@@ -2,6 +2,7 @@ package com.weight.generator;
 
 import java.util.List;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,13 @@ public class CourseAdapter extends ArrayAdapter<Course>{
 		
 		if (Double.isNaN(course.courseGrade))
 			courseRowGrade.setText("N/A");
-		else
+		else {
 			courseRowGrade.setText(String.format("%.2f", course.courseGrade));
-		
+			if (course.courseGrade >= course.courseGoal)
+				courseRowGrade.setTextColor(Color.BLUE);
+			else
+				courseRowGrade.setTextColor(Color.RED);
+		}
 		return itemView;
 	}
 }

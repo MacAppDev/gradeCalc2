@@ -113,7 +113,7 @@ public class CourseDialog extends DialogFragment {
 		if (modifyCourse != null)
 		{
 			itemNameAutoComplete.setText(modifyCourse.courseName.toString());
-			itemGoalEditText.setText(String.format("%.1f%n", modifyCourse.courseGoal));
+			itemGoalEditText.setText(String.format("%.1f%n", modifyCourse.courseGoal).trim());
 		}
 		
 		// Set input filters to limit length and prevent '\n' occurrences
@@ -136,7 +136,8 @@ public class CourseDialog extends DialogFragment {
 		
 		itemGoalEditText.setFilters(new InputFilter[] { 
 				new InputPercentFilter(0.0, 100.0)
-				, new InputFilter.LengthFilter(4)});
+				, new InputFilter.LengthFilter(4)
+				});
 		
 		cancelButton = (Button) view.findViewById(R.id.bCancel);
 		saveButton = (Button) view.findViewById(R.id.bOk);
@@ -165,12 +166,13 @@ public class CourseDialog extends DialogFragment {
 			
 			String courseName = itemNameAutoComplete.getText().toString().trim();
 			boolean isValidCourseName = (courseName.length() > 0);
-			for (Course existingCourse : gradeCalcApp.myCourses.values()) {
-				if (courseName.equals(existingCourse.GetCourseName())) {
-					isValidCourseName = false;
-					break;
+			if (modifyCourse == null)
+				for (Course existingCourse : gradeCalcApp.myCourses.values()) {
+					if (courseName.equals(existingCourse.GetCourseName())) {
+						isValidCourseName = false;
+						break;
+					}
 				}
-			}
 			
 			double itemGoal = 0.;
 			try {
