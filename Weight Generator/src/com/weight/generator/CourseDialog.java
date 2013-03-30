@@ -111,7 +111,7 @@ public class CourseDialog extends DialogFragment {
 		if (modifyCourse != null)
 		{
 			itemNameAutoComplete.setText(modifyCourse.courseName.toString());
-			itemGoalEditText.setText(String.valueOf(modifyCourse.courseGoal));
+			itemGoalEditText.setText(String.format("%.1f%n", modifyCourse.courseGoal));
 		}
 		
 		// Set input filters to limit length and prevent '\n' occurrences
@@ -173,8 +173,7 @@ public class CourseDialog extends DialogFragment {
 			// Ensure that necessary inputs are provided
 			if (courseName.length() > 0 && itemGoal != 0.) {
 				
-				Course newItem = new Course(itemNameAutoComplete.getText()
-						.toString(), itemGoal);
+				Course newItem = new Course(courseName, itemGoal);
 				callingActivity.AddItemToAdapter(newItem, itemIndex);
 
 				// TODO update course here

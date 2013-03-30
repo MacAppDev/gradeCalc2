@@ -46,17 +46,19 @@ public class CourseItemDialog extends DialogFragment {
 	final int NULL_VALUE = -1;
 
 	int itemIndex;
+	double totalItemWeight;
 
 	/**
 	 * Create a new instance of CourseItemDialog, providing "index" as an
 	 * argument.
 	 */
-	static CourseItemDialog newInstance(int index) {
+	static CourseItemDialog newInstance(int index, double totalItemWeight) {
 		CourseItemDialog f = new CourseItemDialog();
 
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
 		args.putInt("index", index);
+		args.putDouble("totalItemWeight", totalItemWeight);
 		f.setArguments(args);
 
 		return f;
@@ -74,17 +76,13 @@ public class CourseItemDialog extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		itemIndex = getArguments().getInt("index");
+		totalItemWeight = getArguments().getDouble("totalItemWeight");
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog, container);
-		if (itemIndex == 0) // If new item
-			getDialog().setTitle("New Course Item");
-		else
-			getDialog().setTitle("Change Course Item"); // TODO Use a resource
-														// for the dialog title
 
 		itemNameEditText = (EditText) view.findViewById(R.id.etAssName);
 		// // Show keyboard automatically
@@ -98,11 +96,15 @@ public class CourseItemDialog extends DialogFragment {
 		callingActivity = (CourseItemDialogListener<CourseItem>) getActivity();
 		modifyItem = callingActivity.GetItem(itemIndex);
 		if (modifyItem != null) {
+			getDialog().setTitle("Change Course Item");
 			itemNameEditText.setText(modifyItem.itemName.toString());
 			if (modifyItem.itemPercentWorth != NULL_VALUE)
 				itemWeightEditText.setText(String.valueOf(modifyItem.itemPercentWorth));
 			if (modifyItem.itemAchievedGrade != NULL_VALUE)
 			itemGradeEditText.setText(String.valueOf(modifyItem.itemAchievedGrade));
+		}
+		else {
+			getDialog().setTitle("New Course Item");
 		}
 
 		// Set input filters to limit length and prevent '\n' occurrences
@@ -153,32 +155,42 @@ public class CourseItemDialog extends DialogFragment {
 			// Retrieve a reference to the activity that originally invoked the
 			// dialog
 			callingActivity = (CourseItemDialogListener<CourseItem>) getActivity();
-			// if there is no Assignment name inserted
-			if (itemNameEditText.getText().toString().trim().length() > 0) {
-				// Generate a course item
-				double itemWeight = NULL_VALUE;
-				double itemGrade = NULL_VALUE;
-				try {
-					itemWeight = Double.parseDouble(itemWeightEditText.getText().toString());
-					itemGrade = Double.parseDouble(itemGradeEditText.getText().toString());
-				}
-
-				catch (Exception e) {
-				}
-
-				CourseItem newItem = new CourseItem(itemNameEditText.getText()
-						.toString(), itemWeight, itemGrade);
-				callingActivity.AddItemToAdapter(newItem, itemIndex);
-
-				// TODO update course here
-				// for now just dismiss
-				CourseItemDialog.this.dismiss();
-			} else {
-				// Prints out message if there is no Assignment name
+			
+			// Generate a course item
+			double itemWeight = NULL_VALUE;
+			double itemGrade = NULL_VALUE;
+			try {
+				itemWeight = Double.parseDouble(itemWeightEditText.getText().toString());
+				itemGrade = Double.parseDouble(itemGradeEditText.getText().toString());
+			}
+			catch (Exception e) {
+			}
+			
+			// Ensure that an assignment/item name has been provided
+			if (itemNameEditText.getText().toString().trim().length() <= 0) {
 				Toast.makeText((Context) getActivity(),
 						(String) ("Please type a Name for the entry."),
 						Toast.LENGTH_SHORT).show();
 			}
+			double maxAllowWeight = (modifyItem == null) ?
+					(100 - totalItemWeight) :
+						((100 - totalItemWeight) + modifyItem.itemPercentWorth);
+			// Ensure that the total course weight will not be greater than 100
+			if (itemWeight > maxAllowWeight) {
+
+				Toast.makeText((Context) getActivity(), 
+						(String) ("Please enter a weight up to " + 
+								String.valueOf(maxAllowWeight)) + "%",
+								Toast.LENGTH_SHORT).show();
+			}
+			
+			else {
+				CourseItem newItem = new CourseItem(itemNameEditText.getText()
+						.toString(), itemWeight, itemGrade);
+				callingActivity.AddItemToAdapter(newItem, itemIndex);
+				CourseItemDialog.this.dismiss();
+			}
 		}
 	};
+	
 }

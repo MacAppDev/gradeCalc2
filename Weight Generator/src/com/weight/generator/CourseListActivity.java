@@ -196,14 +196,19 @@ public class CourseListActivity extends FragmentActivity implements
 	// Method to add item to courseList (from dialog);
 	// fulfills interface contract requirements
 	public void AddItemToAdapter(Course newItem, int itemIndex) {
+		String courseName;
 		// Check if the item already exists
 		if (courseList.size() > itemIndex) {
 			Course modifyItem = courseAdapter.getItem(itemIndex);
+			courseName = modifyItem.GetCourseName();
 			courseAdapter.remove(modifyItem);
+			newItem.courseGrade = modifyItem.courseGrade;
 			courseAdapter.insert(newItem, itemIndex);
-		} else
+		} else {
 			courseAdapter.add(newItem);
-		gradeCalcApp.modifyCourse(newItem.GetCourseName(), newItem);
+			courseName = newItem.GetCourseName();
+		}
+		gradeCalcApp.modifyCourse(courseName, newItem);
 	}
 
 	// Allow dialog to retrieve values from item being modified

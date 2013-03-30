@@ -1,8 +1,6 @@
 package com.weight.generator;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +32,11 @@ public class GradeCalculatorApplication extends Application {
 	}
 	
 	Course modifyCourse(String courseName, Course course) {
+		if (!course.GetCourseName().equals(courseName)) {
+			Course existingCourse = myCourses.remove(courseName);
+			existingCourse.courseName = course.courseName;
+			return myCourses.put(course.GetCourseName(), existingCourse);
+		}
 		return myCourses.put(courseName, course);
 	}
 	

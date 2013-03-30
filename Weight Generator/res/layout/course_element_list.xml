@@ -56,13 +56,13 @@
         android:id="@+id/bAddItem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/calcNeeded"
+        android:layout_above="@+id/bCalcNeeded"
         android:padding="10dp"
         android:text="Add Item" >
     </Button>
 
     <Button
-        android:id="@+id/calcNeeded"
+        android:id="@+id/bCalcNeeded"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

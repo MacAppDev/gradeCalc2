@@ -51,4 +51,16 @@ public class Course {
 		return this.courseGrade;
 	}
 	
+//	 Retrieves the total weight value for all items associated with
+//	 a course. Used to ensure total weight does not exceed 100.
+	double GetTotalItemWeight() {
+		double totalWeight = 0.0;
+		for (CourseItem item : courseItemList) {
+			if (item.itemPercentWorth == NULL_VALUE)
+				continue;
+			totalWeight += item.itemPercentWorth;
+		}
+		return totalWeight;
+	}
+	
 }
