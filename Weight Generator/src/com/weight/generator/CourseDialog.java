@@ -52,6 +52,7 @@ public class CourseDialog extends DialogFragment {
 	private Course modifyCourse;
 	private CourseItemDialogListener<Course> callingActivity;
 	private ArrayAdapter<String> autoCompleteAdapter;
+	private GradeCalculatorApplication gradeCalcApp;
 
 	int itemIndex;
 
@@ -82,6 +83,7 @@ public class CourseDialog extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		itemIndex = getArguments().getInt("index");
+		gradeCalcApp = (GradeCalculatorApplication) getActivity().getApplicationContext();
 	}
 
 	@Override
@@ -161,8 +163,15 @@ public class CourseDialog extends DialogFragment {
 			// dialog
 			callingActivity = (CourseItemDialogListener<Course>) getActivity();
 			
-			
 			String courseName = itemNameAutoComplete.getText().toString().trim();
+			boolean isValidCourseName = (courseName.length() > 0);
+			for (Course existingCourse : gradeCalcApp.myCourses.values()) {
+				if (courseName.equals(existingCourse.GetCourseName())) {
+					isValidCourseName = false;
+					break;
+				}
+			}
+			
 			double itemGoal = 0.;
 			try {
 				itemGoal = Double.parseDouble(itemGoalEditText.getText().toString());
@@ -171,20 +180,16 @@ public class CourseDialog extends DialogFragment {
 			}
 			
 			// Ensure that necessary inputs are provided
-			if (courseName.length() > 0 && itemGoal != 0.) {
+			if (isValidCourseName && itemGoal != 0.) {
 				
 				Course newItem = new Course(courseName, itemGoal);
 				callingActivity.AddItemToAdapter(newItem, itemIndex);
-
-				// TODO update course here
-
-				// for now just dismiss
 				CourseDialog.this.dismiss();
 				
 			} else {
 				// Prints out message if there is no Assignment name
 				Toast.makeText((Context) getActivity(),
-						(String) ("Please provide a name and goal for the entry."),
+						(String) ("Please provide a unique name and goal for the entry."),
 						Toast.LENGTH_SHORT).show();
 			}
 		}
